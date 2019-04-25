@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<meta charset='utf-8' />
+	<TITLE>Feinstaubkarte mit 'Mapbox'
+	</TITLE>
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+	<script type="text/javascript" src="Dateien/luftdatenJS.js"></script>
+	<script type="text/javascript" src="Dateien/shapes.js"></script>
+	<script type="text/javascript" src="Dateien/layers.js"></script>
+	<script type="text/javascript" src="Dateien/createMenus.js"></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+	<style>
+		body { margin:0; padding:0; }
+		#map { position:absolute; top:0; bottom:0; width:100%; }
+	</style>
+</HEAD>
+
+<BODY>
+	<style>
+		#Satmenu {
+			background: #fff;
+			position: absolute;
+			z-index: 1;
+			top: 5px;
+			left: 5px;
+			border-radius: 3px;
+			width: 135px;
+			border: 2px solid rgb(204,227,16);
+			font-family: 'Open Sans', sans-serif;
+		}
+
+		#Satmenu a {
+			font-size: 13px;
+			color: rgb(91,94,100);
+			display: block;
+			margin: 0;
+			padding: 0;
+			padding: 10px;
+			text-decoration: none;
+			border-bottom: 1px solid rgba(0,0,0,0.25);
+			text-align: center;
+		}
+
+		#Satmenu a:last-child {
+			border: none;
+		}
+
+		#Satmenu a:hover {
+			background-color: #f8f8f8;
+			color: #404040;
+		}
+
+		#Satmenu a.active {
+			background-color: rgb(91,94,100);
+			color: #ffffff;
+		}
+
+		#Satmenu a.active:hover {
+			background: rgb(117,120,127);
+		}
+
+		#Vismenu {
+			background: #fff;
+			position: absolute;
+			z-index: 1;
+			top: 150px;
+			left: 821px;
+			border-radius: 3px;
+			width: 135px;
+			border: 2px solid rgb(204,227,16);
+			font-family: 'Open Sans', sans-serif;
+		}
+
+		#Vismenu a {
+			font-size: 13px;
+			color: rgb(91,94,100);
+			display: block;
+			margin: 0;
+			padding: 0;
+			padding: 10px;
+			text-decoration: none;
+			border-bottom: 1px solid rgba(0,0,0,0.25);
+			text-align: center;
+		}
+
+		#Vismenu a:last-child {
+			border: none;
+		}
+
+		#Vismenu a:hover {
+			background-color: #f8f8f8;
+			color: #404040;
+		}
+
+		#Vismenu a.active {
+			background-color: rgb(91,94,100);
+			color: #ffffff;
+		}
+
+		#Vismenu a.active:hover {
+			background: rgb(117,120,127);
+		}
+
+		#Regionmenu {
+			background: #fff;
+			position: absolute;
+			z-index: 1;
+			top: 373px;
+			left: 821px;
+			border-radius: 3px;
+			width: 135px;
+			border: 2px solid rgb(204,227,16);
+			font-family: 'Open Sans', sans-serif;
+		}
+
+		#Regionmenu a {
+			font-size: 13px;
+			color: rgb(91,94,100);
+			display: block;
+			margin: 0;
+			padding: 0;
+			padding: 10px;
+			text-decoration: none;
+			border-bottom: 1px solid rgba(0,0,0,0.25);
+			text-align: center;
+		}
+
+		#Regionmenu a:last-child {
+			border: none;
+		}
+
+		#Regionmenu a:hover {
+			background-color: #f8f8f8;
+			color: #404040;
+		}
+
+		#Regionmenu a.active {
+			background-color: rgb(91,94,100);
+			color: #ffffff;
+		}
+
+		#Regionmenu a.active:hover {
+			background: rgb(117,120,127);
+		}
+	</style>
+	<nav id="Satmenu"></nav>
+	<nav id="Vismenu"></nav>
+	<nav id="Regionmenu"></nav>
+	<div id='map' style='width: 960px; height: 600px;'></div>
+
+	<script>
+		mapboxgl.accessToken = 'pk.eyJ1IjoiZGVyYm9ibyIsImEiOiJjanM0aGdvanYwNTJuNDVtanp2bGt6MTgzIn0.zufz-bQxSVIKsh7DdyXdLg';
+
+		if (!mapboxgl.supported()) {
+		alert('Ihr Browser unterstützt, mit den aktuellen Einstellungen, Mapbox GL nicht!\nYour browser does not support Mapbox GL with the current setup');
+		}
+
+		else {
+
+			//alert('Für volle Unterstützung wird der EDGE- Browser von Microsoft empfolen.\nMicrosofts EDGE- Browser is recommended.');
+			//var shapeMD = shape_MD();
+			/*var GeoString = JSON.stringify(Luftdaten);
+			document.write(GeoString);
+			console.log(GeoString);*/
+
+			var luftdatenURL = "http://api.luftdaten.info/v1/filter/area=52.1205333,11.6276237,50";
+			var luftRohdaten = datenHolen(luftdatenURL);
+			var Luftdaten = LuftdatentoGeoJSON(luftRohdaten);
+			var toggleableLayerVisIds = [ 'Heatmap PM 10 µg', 'Heatmap PM 2,5 µg', 'Sensoren']; // Liste für Darstellungsmenü
+			var toggleableLayerKommIds = [ 'Stadtgebiet Magdeburg' , 'Stadtgebietsgrenze Magdeburg', 'Stadtgebiet Dessau-Rosslau', 'Stadtgebietsgrenze Dessau-Rosslau']; // Liste für Regionen- Menü
+
+			alert(Luftdaten.length + " Sensoren in und um Magdeburg (50Km) gefunden.\n" + "We found " + Luftdaten.length + " Sensors in an around Magdeburg (50Km).");
+			//alert(welcheSensoren(luftRohdaten)); // Anzeige der in luftdatenURL verwendeten Sensoren
+
+			var map = new mapboxgl.Map({
+				container: 'map',
+				style: 'mapbox://styles/mapbox/outdoors-v11',
+				center: [11.6276237, 52.1205333],
+				zoom: 10.20
+			});
+
+			//Satmenu(); // Menü Satellitenansicht
+
+			map.addControl(new mapboxgl.FullscreenControl());
+
+			var nav = new mapboxgl.NavigationControl();
+			map.addControl (nav, 'top-right');
+
+			var scale = new mapboxgl.ScaleControl({
+				maxWidth: 80,
+				unit: 'metric'
+			});
+			map.addControl(scale);
+
+			map.on('load', function() {
+
+				addLayerSatellite (map);
+				addLayerMagdeburg (map);
+				addLayerDessau_Rosslau (map);
+				addLayerSensoren (map);
+				addLayerHeatmap10 (map);
+				addLayerHeatmap2_5 (map);
+
+				var popup = new mapboxgl.Popup({ // Popup für Sensordaten
+					closeButton: false,
+					closeOnClick: false
+				});
+
+				map.on('mouseenter', 'Sensoren', function(e) {
+					map.getCanvas().style.cursor = 'pointer'; // Änderung des Aussehens des Mauszeigerns bei "Berührung" der Punkte
+						var coordinates = e.features[0].geometry.coordinates.slice(); // Wertzuweisungen für Sensorwerte
+						var featureid = e.features[0].properties.locationID;
+						var sensor1 = e.features[0].properties.P1;
+						var sensor2 = e.features[0].properties.P2;
+						var dateTime = "Stand: " + e.features[0].properties.timestamp;
+						if (e.features[0].properties.Sensortyp === "BME280" || e.features[0].properties.Sensortyp == "DHT22") {
+							var temperatur = e.features[0].properties.Temperatur;
+						}
+						if (e.features[0].properties.Sensortyp === "BME280" || e.features[0].properties.Sensortyp == "DHT22") {
+						  var humidity = e.features[0].properties.Luftfeuchtigkeit;
+						}
+						if (e.features[0].properties.Sensortyp == "BME280") {
+						  var pressure = (Math.ceil(e.features[0].properties.Luftdruck/100).toFixed(2)); // Umrechnung Luftdruck
+						}
+
+						// Ensure that if the map is zoomed out such that multiple
+						// copies of the feature are visible, the popup appears
+						// over the copy being pointed to.
+						while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+						coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+						}
+
+						// Populate the popup and set its coordinates
+						// based on the feature found.
+						popup.setLngLat(coordinates) // Ort für Popup = Punktkkordinaten
+						if (e.features[0].properties.Sensortyp === "DHT22") { // Darstellungsformatierung für Popup
+						  popup.setLngLat(coordinates)
+						  .setHTML("<center><b>Standort- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br><br><b>Temperatur: </b> " + temperatur + " °C" + "<br><b>Luftfeuchtigkeit: </b> " + humidity + " %" + "<br>" + dateTime.sub())
+						  .addTo(map);
+						} else if(e.features[0].properties.Sensortyp === "BME280") {
+						   popup.setLngLat(coordinates)
+						  .setHTML("<center><b>Standort- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br><br><b>Temperatur: </b> " + temperatur + " °C" + "<br><b>Luftdruck: </b> " + pressure + " hPa (ca. " + (Math.ceil(pressure/1013.25).toFixed(2)) + " Bar)" + "<br><b>Luftfeuchtigkeit: </b> " + humidity + " %" + "<br>" + dateTime.sub())
+						  .addTo(map);
+						} else if (e.features[0].properties.Sensortyp === "SDS011") {
+						  popup.setLngLat(coordinates)
+						  .setHTML("<center><b>Standort- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br>" + dateTime.sub())
+						  .addTo(map);
+						}
+				});
+
+				map.on('mouseleave', 'Sensoren', function() {
+					map.getCanvas().style.cursor = '';
+					popup.remove();
+				});
+
+				createMenu(['Satellitenansicht'], 'Satmenu'); // Menü für Satellitenansicht (Array als erstes Argument weil die Funktion über Arra iteriert. Sonst würde über einzelne String- Zeichen iteriert)
+				createMenu(toggleableLayerVisIds, "Vismenu"); // Menü für Visualisierungen (Heatmaps und Punkte)
+				createMenu(toggleableLayerKommIds, "Regionmenu"); // Menü für Darstellung der Regionen (Magdeburg, Dessau-Rosslau...)
+			});
+
+		}
+	</script>
+
+</BODY>
+</HTML>

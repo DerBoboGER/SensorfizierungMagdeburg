@@ -1,0 +1,1 @@
+http://api.luftdaten.info/static/v1/data.json

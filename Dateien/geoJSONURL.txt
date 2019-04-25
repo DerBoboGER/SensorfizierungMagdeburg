@@ -1,0 +1,8 @@
+https://drive.google.com/file/d/1HQUou89SbBxGIU81ptYJe50mUkGquBU7/view?usp=sharing
+
+https://api.myjson.com/bins/g6otm (http://myjson.com/g6otm - Werte float)
+
+https://api.myjson.com/bins/7ywoa (http://myjson.com/7ywoa - Koordinaten und Werte float)
+
+https://api.myjson.com/bins/15i0s0 (http://api.myjson.com/15i0s0) (Koordinaten und Werte float; timestamp und keine doppelten sensoren)
+

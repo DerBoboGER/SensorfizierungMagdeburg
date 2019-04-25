@@ -1,0 +1,1 @@
+http://api.luftdaten.info/v1/filter/area=52.124886,11.634044,18
