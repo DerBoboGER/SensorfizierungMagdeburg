@@ -210,7 +210,7 @@
 				map.on('mouseenter', 'Sensoren', function(e) {
 					map.getCanvas().style.cursor = 'pointer'; // Änderung des Aussehens des Mauszeigerns bei "Berührung" der Punkte
 						var coordinates = e.features[0].geometry.coordinates.slice(); // Wertzuweisungen für Sensorwerte
-						var featureid = e.features[0].properties.locationID;
+						var featureid = e.features[0].properties.SensorID;
 						var sensor1 = e.features[0].properties.P1;
 						var sensor2 = e.features[0].properties.P2;
 						var dateTime = "Stand: " + e.features[0].properties.timestamp;
@@ -236,7 +236,7 @@
 						popup.setLngLat(coordinates) // Ort für Popup = Punktkkordinaten
 						if (e.features[0].properties.Sensortyp === "DHT22") { // Darstellungsformatierung für Popup
 						  popup.setLngLat(coordinates)
-						  .setHTML("<center><b>Standort- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br><br><b>Temperatur: </b> " + temperatur + " °C" + "<br><b>Luftfeuchtigkeit: </b> " + humidity + " %" + "<br>" + dateTime.sub())
+						  .setHTML("<center><b>Sensor- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br><br><b>Temperatur: </b> " + temperatur + " °C" + "<br><b>Luftfeuchtigkeit: </b> " + humidity + " %" + "<br>" + dateTime.sub())
 						  .addTo(map);
 						} else if(e.features[0].properties.Sensortyp === "BME280") {
 						   popup.setLngLat(coordinates)
