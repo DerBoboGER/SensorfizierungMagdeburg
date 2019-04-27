@@ -147,13 +147,13 @@
 	<nav id="Satmenu"></nav>
 	<nav id="Vismenu"></nav>
 	<nav id="Regionmenu"></nav>
-	<div id='map' style='width: 960px; height: 600px;'></div>
+	<div id="map" style='width: 960px; height: 600px;'></div>
 
 	<script>
 		mapboxgl.accessToken = 'pk.eyJ1IjoiZGVyYm9ibyIsImEiOiJjanM0aGdvanYwNTJuNDVtanp2bGt6MTgzIn0.zufz-bQxSVIKsh7DdyXdLg';
 
 		if (!mapboxgl.supported()) {
-		alert('Ihr Browser unterstützt, mit den aktuellen Einstellungen, Mapbox GL nicht!\nYour browser does not support Mapbox GL with the current setup');
+		alert("Ihr Browser unterstützt, mit den aktuellen Einstellungen, Mapbox GL nicht!\nYour browser does not support Mapbox GL with the current setup");
 		}
 
 		else {
@@ -164,11 +164,11 @@
 			document.write(GeoString);
 			console.log(GeoString);*/
 
-			var luftdatenURL = "http://api.luftdaten.info/v1/filter/area=52.1205333,11.6276237,50";
+			var luftdatenURL = 'http://api.luftdaten.info/v1/filter/area=52.1205333,11.6276237,50';
 			var luftRohdaten = datenHolen(luftdatenURL);
 			var Luftdaten = LuftdatentoGeoJSON(luftRohdaten);
-			var toggleableLayerVisIds = [ 'Heatmap PM 10 µg', 'Heatmap PM 2,5 µg', 'Sensoren']; // Liste für Darstellungsmenü
-			var toggleableLayerKommIds = [ 'Stadtgebiet Magdeburg' , 'Stadtgebietsgrenze Magdeburg', 'Stadtgebiet Dessau-Rosslau', 'Stadtgebietsgrenze Dessau-Rosslau']; // Liste für Regionen- Menü
+			var toggleableLayerVisIds = [ "Heatmap PM 10 µg", "Heatmap PM 2,5 µg", "Sensoren"]; // Liste für Darstellungsmenü
+			var toggleableLayerKommIds = [ "Stadtgebiet Magdeburg" , "Stadtgebietsgrenze Magdeburg", "Stadtgebiet Dessau-Rosslau", "Stadtgebietsgrenze Dessau-Rosslau"]; // Liste für Regionen- Menü
 
 			alert(Luftdaten.length + " Sensoren in und um Magdeburg (50Km) gefunden.\n" + "We found " + Luftdaten.length + " Sensors in an around Magdeburg (50Km).");
 			//alert(welcheSensoren(luftRohdaten)); // Anzeige der in luftdatenURL verwendeten Sensoren
@@ -254,7 +254,7 @@
 					popup.remove();
 				});
 
-				createMenu(['Satellitenansicht'], 'Satmenu'); // Menü für Satellitenansicht (Array als erstes Argument weil die Funktion über Arra iteriert. Sonst würde über einzelne String- Zeichen iteriert)
+				createMenu(['Satellitenansicht'], "Satmenu"); // Menü für Satellitenansicht (Array als erstes Argument weil die Funktion über Arra iteriert. Sonst würde über einzelne String- Zeichen iteriert)
 				createMenu(toggleableLayerVisIds, "Vismenu"); // Menü für Visualisierungen (Heatmaps und Punkte)
 				createMenu(toggleableLayerKommIds, "Regionmenu"); // Menü für Darstellung der Regionen (Magdeburg, Dessau-Rosslau...)
 			});
