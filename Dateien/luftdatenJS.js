@@ -65,6 +65,7 @@ function LuftdatentoGeoJSON(ausObjekt){ // Funktion für das Umwandeln der Luftd
 
     if (ausObjekt[i].sensor.sensor_type.name == "SDS011"){ // Wenn Sensortyp- Name des aktuellen Objektelementes ("i") "SDS011" ist ...
       newFeature["properties"] ={ // Variable "newFeature" mit Objekt "properties" (Eigenschafte) erweitern ...
+        "SensorID": Math.floor(ausObjekt[i].id/1000),
         "SDS011": true,
         "Sensortyp": ausObjekt[i].sensor.sensor_type.name, // ... mit GeoJSON- Feature- properties- Syntax
         "locationID": Number(ausObjekt[i].location.id), // Eigenschaft "locationID" erzeugen und den entsprechenden Wert aus dem Objekt (Luftdaten.info) zuweisen
@@ -89,6 +90,7 @@ function LuftdatentoGeoJSON(ausObjekt){ // Funktion für das Umwandeln der Luftd
       }
     } else if (ausObjekt[i].sensor.sensor_type.name == "DHT22" || ausObjekt[i].sensor.sensor_type.name == "DHT11"){ // folgende zwei Feature- Definitionen und Schleifen wie vorige, nur für die Sensortypen "DHT22", "DHT11" und "BME280"
       newFeature["properties"] ={
+        "SensorID": Math.floor(ausObjekt[i].id/1000),
         "Sensortyp": ausObjekt[i].sensor.sensor_type.name,
         "locationID": Number(ausObjekt[i].location.id),
         "timestamp": newTimestamp
@@ -117,6 +119,7 @@ function LuftdatentoGeoJSON(ausObjekt){ // Funktion für das Umwandeln der Luftd
       }
     } else if (ausObjekt[i].sensor.sensor_type.name == "BME280"){
       newFeature["properties"] ={
+        "SensorID": Math.floor(ausObjekt[i].id/1000),
         "Sensortyp": ausObjekt[i].sensor.sensor_type.name,
         "locationID": Number(ausObjekt[i].location.id),
         "timestamp": newTimestamp

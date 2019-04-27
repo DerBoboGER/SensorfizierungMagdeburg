@@ -147,13 +147,13 @@
 	<nav id="Satmenu"></nav>
 	<nav id="Vismenu"></nav>
 	<nav id="Regionmenu"></nav>
-	<div id='map' style='width: 960px; height: 600px;'></div>
+	<div id="map" style='width: 960px; height: 600px;'></div>
 
 	<script>
 		mapboxgl.accessToken = 'pk.eyJ1IjoiZGVyYm9ibyIsImEiOiJjanM0aGdvanYwNTJuNDVtanp2bGt6MTgzIn0.zufz-bQxSVIKsh7DdyXdLg';
 
 		if (!mapboxgl.supported()) {
-		alert('Ihr Browser unterstützt, mit den aktuellen Einstellungen, Mapbox GL nicht!\nYour browser does not support Mapbox GL with the current setup');
+		alert("Ihr Browser unterstützt, mit den aktuellen Einstellungen, Mapbox GL nicht!\nYour browser does not support Mapbox GL with the current setup");
 		}
 
 		else {
@@ -164,11 +164,11 @@
 			document.write(GeoString);
 			console.log(GeoString);*/
 
-			var luftdatenURL = "http://api.luftdaten.info/v1/filter/area=52.1205333,11.6276237,50";
+			var luftdatenURL = 'http://api.luftdaten.info/v1/filter/area=52.1205333,11.6276237,50';
 			var luftRohdaten = datenHolen(luftdatenURL);
 			var Luftdaten = LuftdatentoGeoJSON(luftRohdaten);
-			var toggleableLayerVisIds = [ 'Heatmap PM 10 µg', 'Heatmap PM 2,5 µg', 'Sensoren']; // Liste für Darstellungsmenü
-			var toggleableLayerKommIds = [ 'Stadtgebiet Magdeburg' , 'Stadtgebietsgrenze Magdeburg', 'Stadtgebiet Dessau-Rosslau', 'Stadtgebietsgrenze Dessau-Rosslau']; // Liste für Regionen- Menü
+			var toggleableLayerVisIds = [ "Heatmap PM 10 µg", "Heatmap PM 2,5 µg", "Sensoren"]; // Liste für Darstellungsmenü
+			var toggleableLayerKommIds = [ "Stadtgebiet Magdeburg" , "Stadtgebietsgrenze Magdeburg", "Stadtgebiet Dessau-Rosslau", "Stadtgebietsgrenze Dessau-Rosslau"]; // Liste für Regionen- Menü
 
 			alert(Luftdaten.length + " Sensoren in und um Magdeburg (50Km) gefunden.\n" + "We found " + Luftdaten.length + " Sensors in an around Magdeburg (50Km).");
 			//alert(welcheSensoren(luftRohdaten)); // Anzeige der in luftdatenURL verwendeten Sensoren
@@ -210,7 +210,7 @@
 				map.on('mouseenter', 'Sensoren', function(e) {
 					map.getCanvas().style.cursor = 'pointer'; // Änderung des Aussehens des Mauszeigerns bei "Berührung" der Punkte
 						var coordinates = e.features[0].geometry.coordinates.slice(); // Wertzuweisungen für Sensorwerte
-						var featureid = e.features[0].properties.locationID;
+						var featureid = e.features[0].properties.SensorID;
 						var sensor1 = e.features[0].properties.P1;
 						var sensor2 = e.features[0].properties.P2;
 						var dateTime = "Stand: " + e.features[0].properties.timestamp;
@@ -236,7 +236,7 @@
 						popup.setLngLat(coordinates) // Ort für Popup = Punktkkordinaten
 						if (e.features[0].properties.Sensortyp === "DHT22") { // Darstellungsformatierung für Popup
 						  popup.setLngLat(coordinates)
-						  .setHTML("<center><b>Standort- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br><br><b>Temperatur: </b> " + temperatur + " °C" + "<br><b>Luftfeuchtigkeit: </b> " + humidity + " %" + "<br>" + dateTime.sub())
+						  .setHTML("<center><b>Sensor- ID:</b> " + featureid + "</center><hr><b>PM 10:</b> " + sensor1 + " µg/m<sup>3</sup>" + "<br><b>PM 2,5:</b> " + sensor2 + " µg/m<sup>3</sup>" + "<br><br><b>Temperatur: </b> " + temperatur + " °C" + "<br><b>Luftfeuchtigkeit: </b> " + humidity + " %" + "<br>" + dateTime.sub())
 						  .addTo(map);
 						} else if(e.features[0].properties.Sensortyp === "BME280") {
 						   popup.setLngLat(coordinates)
@@ -254,7 +254,7 @@
 					popup.remove();
 				});
 
-				createMenu(['Satellitenansicht'], 'Satmenu'); // Menü für Satellitenansicht (Array als erstes Argument weil die Funktion über Arra iteriert. Sonst würde über einzelne String- Zeichen iteriert)
+				createMenu(['Satellitenansicht'], "Satmenu"); // Menü für Satellitenansicht (Array als erstes Argument weil die Funktion über Arra iteriert. Sonst würde über einzelne String- Zeichen iteriert)
 				createMenu(toggleableLayerVisIds, "Vismenu"); // Menü für Visualisierungen (Heatmaps und Punkte)
 				createMenu(toggleableLayerKommIds, "Regionmenu"); // Menü für Darstellung der Regionen (Magdeburg, Dessau-Rosslau...)
 			});
